@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Brand Color Palette</title>
+<style>
+  :root {
+    /* ---- PRIMARY ---- */
+    --primary-navy:   #003471;
+    --primary-blue:   #2B71B8;
+    --primary-ice:    #D9E9F7;
+    /* ---- SECONDARY ---- */
+    --purple-deep:    #39256C;
+    --purple:         #66449B;
+    --purple-pale:    #E6D8EB;
+    --maroon:         #710E23;
+    --rose:           #B13456;
+    --rose-pale:      #F5D9E9;
+    --gold-deep:      #A2792C;
+    --gold:           #C39E40;
+    --gold-pale:      #F8E7C0;
+    --teal:           #00716D;
+    --green:          #2DB591;
+    --green-pale:     #D9EEE9;
+    --gray:           #C6D0DC;
+    --gray-pale:      #DDE7F2;
+    --gray-ice:       #E8F3FB;
+
+    --ink: #1c1e22;
+    --muted: #6a6f77;
+    --line: #e7e9ee;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #ffffff;
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    padding: 56px 40px 80px;
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  header { margin-bottom: 48px; }
+  h1 {
+    font-size: 13px; font-weight: 700; letter-spacing: 0.14em;
+    text-transform: uppercase; margin: 0 0 6px;
+  }
+  header p { margin: 0; color: var(--muted); font-size: 14px; }
+
+  .top { display: grid; grid-template-columns: 420px 1fr; gap: 56px; align-items: start; }
+  @media (max-width: 900px) { .top { grid-template-columns: 1fr; } }
+
+  /* ---- WHEEL ---- */
+  .wheel-panel svg { width: 100%; height: auto; display: block; }
+  .wheel-seg { cursor: pointer; transition: opacity .15s; }
+  .wheel-seg:hover { opacity: .82; }
+
+  /* ---- SWATCH GRID ---- */
+  .section-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; margin: 0 0 18px; color: var(--ink);
+  }
+  .section + .section { margin-top: 44px; }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 28px 24px;
+  }
+  .swatch { cursor: pointer; user-select: none; }
+  .chip {
+    height: 76px; border-radius: 5px; border: 1px solid rgba(0,0,0,.06);
+    position: relative; transition: transform .12s;
+  }
+  .swatch:hover .chip { transform: translateY(-2px); }
+  .chip .copied {
+    position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 700; letter-spacing: .04em; color: #fff;
+    background: rgba(0,0,0,.55); border-radius: 5px; opacity: 0;
+    transition: opacity .15s; text-transform: uppercase;
+  }
+  .chip.show .copied { opacity: 1; }
+  .name { font-size: 13px; font-weight: 600; margin: 10px 0 6px; }
+  .meta { font-size: 11px; line-height: 1.55; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .meta .hex { color: var(--ink); font-weight: 600; }
+
+  /* ---- CSS VARS BLOCK ---- */
+  .code-block { margin-top: 64px; }
+  .code-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+  .code-head .section-label { margin: 0; }
+  .copy-all {
+    font-size: 12px; font-weight: 600; border: 1px solid var(--line);
+    background: #fff; color: var(--ink); padding: 7px 14px; border-radius: 6px; cursor: pointer;
+  }
+  .copy-all:hover { background: #f6f7f9; }
+  pre {
+    margin: 0; background: #0f1115; color: #e6e6e6; border-radius: 8px;
+    padding: 22px 24px; overflow-x: auto; font-size: 12.5px; line-height: 1.7;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  pre .tok-var { color: #8fd3ff; }
+  pre .tok-val { color: #ffd479; }
+  pre .tok-cmt { color: #6a7079; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Brand Color Palette</h1>
+    <p>Click any swatch or wheel segment to copy its hex. Grab the full token block at the bottom.</p>
+  </header>
+
+  <div class="top">
+    <div class="wheel-panel" id="wheel"></div>
+
+    <div>
+      <div class="section">
+        <p class="section-label">Primary Colors</p>
+        <div class="grid" id="grid-primary"></div>
+      </div>
+      <div class="section">
+        <p class="section-label">Secondary Colors</p>
+        <div class="grid" id="grid-secondary"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="code-block">
+    <div class="code-head">
+      <p class="section-label">CSS Variables</p>
+      <button class="copy-all" id="copyAll">Copy all</button>
+    </div>
+    <pre id="cssOut"></pre>
+  </div>
+</div>
+
+<script>
+const PRIMARY = [
+  { key:'primary-navy', name:'Navy',  hex:'003471', rgb:'0, 52, 113',   cmyk:'100, 75, 0, 40' },
+  { key:'primary-blue', name:'Blue',  hex:'2B71B8', rgb:'43, 113, 184', cmyk:'84, 54, 0, 0' },
+  { key:'primary-ice',  name:'Ice',   hex:'D9E9F7', rgb:'217, 233, 247',cmyk:'13, 3, 0, 0' },
+];
+const SECONDARY = [
+  { key:'purple-deep', name:'Purple Deep', hex:'39256C', rgb:'57, 37, 108',  cmyk:'92, 100, 18, 19' },
+  { key:'purple',      name:'Purple',      hex:'66449B', rgb:'102, 68, 155', cmyk:'72, 87, 0, 0' },
+  { key:'purple-pale', name:'Purple Pale', hex:'E6D8EB', rgb:'230, 216, 235',cmyk:'8, 14, 0, 0' },
+  { key:'maroon',      name:'Maroon',      hex:'710E23', rgb:'113, 14, 35',  cmyk:'32, 100, 79, 44' },
+  { key:'rose',        name:'Rose',        hex:'B13456', rgb:'177, 52, 86',  cmyk:'25, 93, 53, 9' },
+  { key:'rose-pale',   name:'Rose Pale',   hex:'F5D9E9', rgb:'245, 217, 233',cmyk:'1, 17, 0, 0' },
+  { key:'gold-deep',   name:'Gold Deep',   hex:'A2792C', rgb:'162, 121, 44', cmyk:'33, 49, 100, 12' },
+  { key:'gold',        name:'Gold',        hex:'C39E40', rgb:'195, 158, 64', cmyk:'24, 35, 89, 2' },
+  { key:'gold-pale',   name:'Gold Pale',   hex:'F8E7C0', rgb:'248, 231, 192',cmyk:'2, 8, 27, 0' },
+  { key:'teal',        name:'Teal',        hex:'00716D', rgb:'0, 113, 109',  cmyk:'89, 36, 57, 16' },
+  { key:'green',       name:'Green',       hex:'2DB591', rgb:'45, 181, 145', cmyk:'73, 1, 57, 0' },
+  { key:'green-pale',  name:'Green Pale',  hex:'D9EEE9', rgb:'217, 238, 233',cmyk:'14, 0, 9, 0' },
+  { key:'gray',        name:'Gray',        hex:'C6D0DC', rgb:'198, 208, 220',cmyk:'21, 12, 7, 0' },
+  { key:'gray-pale',   name:'Gray Pale',   hex:'DDE7F2', rgb:'221, 231, 242',cmyk:'12, 4, 1, 0' },
+  { key:'gray-ice',    name:'Gray Ice',    hex:'E8F3FB', rgb:'232, 243, 251',cmyk:'8, 1, 0, 0' },
+];
+
+/* ---- copy helper ---- */
+function copy(text) {
+  navigator.clipboard?.writeText(text).catch(()=>{
+    const ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta); ta.select();
+    document.execCommand('copy'); ta.remove();
+  });
+}
+
+/* ---- swatch grid ---- */
+function buildGrid(el, data) {
+  data.forEach(c => {
+    const s = document.createElement('div');
+    s.className = 'swatch';
+    s.innerHTML = `
+      <div class="chip" style="background:#${c.hex}">
+        <div class="copied">Copied #${c.hex}</div>
+      </div>
+      <div class="name">${c.name}</div>
+      <div class="meta">
+        <span class="hex">HEX #${c.hex}</span><br>
+        RGB ${c.rgb}<br>
+        CMYK ${c.cmyk}
+      </div>`;
+    s.addEventListener('click', () => {
+      copy('#' + c.hex);
+      const chip = s.querySelector('.chip');
+      chip.classList.add('show');
+      setTimeout(()=>chip.classList.remove('show'), 900);
+    });
+    el.appendChild(s);
+  });
+}
+buildGrid(document.getElementById('grid-primary'), PRIMARY);
+buildGrid(document.getElementById('grid-secondary'), SECONDARY);
+
+/* ---- color wheel (concentric arcs) ---- */
+/* Each segment = outer (deep) / mid (base) / inner (pale) trio, clockwise from top. */
+const SEGMENTS = [
+  ['39256C','66449B','E6D8EB'],
+  ['710E23','B13456','F5D9E9'],
+  ['A2792C','C39E40','F8E7C0'],
+  ['00716D','2DB591','D9EEE9'],
+  ['C6D0DC','DDE7F2','E8F3FB'],
+  ['003471','2B71B8','D9E9F7'],
+  ['003471','2B71B8','D9E9F7'],
+  ['003471','2B71B8','D9E9F7'],
+];
+const CX = 200, CY = 200;
+const RINGS = [ [110,190], [55,110], [14,55] ]; // [inner,outer] outer→inner
+const N = SEGMENTS.length;
+const SEG = (Math.PI*2)/N;
+const START = -Math.PI/2 - SEG/2; // center first seg at top
+
+function pt(cx, cy, r, a){ return [cx + r*Math.cos(a), cy + r*Math.sin(a)]; }
+function arcPath(iR, oR, a0, a1){
+  const large = (a1 - a0) > Math.PI ? 1 : 0;
+  const [ox0,oy0]=pt(CX,CY,oR,a0), [ox1,oy1]=pt(CX,CY,oR,a1);
+  const [ix1,iy1]=pt(CX,CY,iR,a1), [ix0,iy0]=pt(CX,CY,iR,a0);
+  return `M ${ox0} ${oy0} A ${oR} ${oR} 0 ${large} 1 ${ox1} ${oy1} `
+       + `L ${ix1} ${iy1} A ${iR} ${iR} 0 ${large} 0 ${ix0} ${iy0} Z`;
+}
+
+let svg = `<svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">`;
+for (let i=0;i<N;i++){
+  const a0 = START + i*SEG, a1 = a0 + SEG;
+  SEGMENTS[i].forEach((hex, ring) => {
+    const [iR,oR] = RINGS[ring];
+    svg += `<path class="wheel-seg" data-hex="${hex}" d="${arcPath(iR,oR,a0,a1)}" `
+         + `fill="#${hex}"><title>#${hex}</title></path>`;
+  });
+}
+svg += `<circle cx="${CX}" cy="${CY}" r="14" fill="#fff"/></svg>`;
+document.getElementById('wheel').innerHTML = svg;
+document.querySelectorAll('.wheel-seg').forEach(p => {
+  p.addEventListener('click', () => copy('#' + p.dataset.hex));
+});
+
+/* ---- CSS variables block ---- */
+function cssLines() {
+  const line = c => `  <span class="tok-var">--${c.key}</span>: <span class="tok-val">#${c.hex}</span>;`;
+  const raw  = c => `  --${c.key}: #${c.hex};`;
+  const html = [
+    ':root {',
+    '  <span class="tok-cmt">/* Primary */</span>',
+    ...PRIMARY.map(line),
+    '  <span class="tok-cmt">/* Secondary */</span>',
+    ...SECONDARY.map(line),
+    '}'
+  ].join('\n');
+  const plain = [
+    ':root {',
+    '  /* Primary */',
+    ...PRIMARY.map(raw),
+    '  /* Secondary */',
+    ...SECONDARY.map(raw),
+    '}'
+  ].join('\n');
+  return { html, plain };
+}
+const css = cssLines();
+document.getElementById('cssOut').innerHTML = css.html;
+document.getElementById('copyAll').addEventListener('click', (e) => {
+  copy(css.plain);
+  e.target.textContent = 'Copied!';
+  setTimeout(()=>e.target.textContent = 'Copy all', 1200);
+});
+</script>
+</body>
+</html>
