@@ -73,7 +73,10 @@
   .section-sub code { font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 12px; color: var(--ink); }
 
   .top { display: grid; grid-template-columns: 380px 1fr; gap: 48px; align-items: center; }
-  @media (max-width: 900px) { .top { grid-template-columns: 1fr; gap: 32px; } }
+  @media (max-width: 900px) { .top { grid-template-columns: 1fr; gap: 32px; }   .type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  } }
 
   /* ---- WHEEL ---- */
   .wheel-panel svg { width: 100%; height: auto; display: block; max-width: 340px; margin: 0 auto; }
@@ -124,7 +127,7 @@
   /* ---- TYPOGRAPHY (card grid, mirrors swatches) ---- */
   .type-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
     gap: 24px 20px;
   }
   .type-card {
