@@ -148,6 +148,29 @@
   }
   .spec-pill:hover { background: #eef0f3; border-color: #d3d7de; }
   .spec-pill.copied { background: #e7f6ee; border-color: #b6e2c9; }
+
+  /* ---- TAILWIND REFERENCE ---- */
+  .ref-groups { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 24px 20px; }
+  .ref-group { }
+  .ref-group h4 {
+    font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+    color: var(--muted); margin: 0 0 12px;
+  }
+  .ref-item {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: #f6f7f9; border: 1px solid var(--line); border-radius: 6px;
+    padding: 8px 12px; cursor: pointer; width: 100%; text-align: left;
+    font-family: inherit; transition: background .12s, border-color .12s; margin-bottom: 6px;
+  }
+  .ref-item:hover { background: #eef0f3; border-color: #d3d7de; }
+  .ref-item.copied { background: #e7f6ee; border-color: #b6e2c9; }
+  .ref-item .ref-cls {
+    font-size: 12.5px; color: var(--ink); font-weight: 600;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  .ref-item .ref-val { font-size: 11.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .ref-swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(0,0,0,.1); flex-shrink: 0; }
+  .ref-val-wrap { display: flex; align-items: center; gap: 8px; }
   .spec-pill .lbl { font-size: 11px; color: #9aa0a8; }
   .spec-pill .cls {
     font-size: 12px; color: var(--ink); font-weight: 600;
@@ -195,6 +218,16 @@
     </div>
     <div class="type-grid" id="type-headings"></div>
     <div class="type-grid" id="type-body" style="margin-top:20px"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <p class="section-label">Tailwind Class Reference</p>
+        <p class="section-sub">Every class used in the type scale, with its plain CSS value. Click to copy.</p>
+      </div>
+    </div>
+    <div class="ref-groups" id="ref-groups"></div>
   </div>
 
   <div class="card">
@@ -453,6 +486,62 @@ const hWrap = document.getElementById('type-headings');
 HEADINGS.forEach(t => hWrap.appendChild(typeRow(t)));
 const bWrap = document.getElementById('type-body');
 BODY.forEach(t => bWrap.appendChild(typeRow(t)));
+
+/* ---- TAILWIND CLASS REFERENCE ---- */
+/* Only the classes actually used in the type scale above, grouped with plain values. */
+const REFERENCE = [
+  { group:'Font Size', items:[
+    { cls:'text-3xl',     val:'30px · 1.875rem' },
+    { cls:'text-4xl',     val:'36px · 2.25rem' },
+    { cls:'md:text-6xl',  val:'60px · 3.75rem (≥768px)' },
+    { cls:'text-xl',      val:'20px · 1.25rem' },
+    { cls:'text-lg',      val:'18px · 1.125rem' },
+    { cls:'md:text-lg',   val:'18px · 1.125rem (≥768px)' },
+    { cls:'text-base',    val:'16px · 1rem' },
+    { cls:'text-[13px]',  val:'13px (arbitrary)' },
+  ]},
+  { group:'Line Height', items:[
+    { cls:'leading-8',        val:'32px · 2rem' },
+    { cls:'leading-[0.95]',   val:'0.95 (unitless)' },
+    { cls:'md:leading-[0.92]',val:'0.92 (unitless, ≥768px)' },
+  ]},
+  { group:'Letter Spacing', items:[
+    { cls:'tracking-[-.04em]', val:'-0.04em' },
+  ]},
+  { group:'Font Weight', items:[
+    { cls:'font-extralight', val:'200' },
+    { cls:'font-semibold',   val:'600' },
+  ]},
+  { group:'Color', items:[
+    { cls:'text-[#5c6a82]', val:'#5C6A82', color:'#5c6a82' },
+  ]},
+];
+
+const refWrap = document.getElementById('ref-groups');
+REFERENCE.forEach(g => {
+  const col = document.createElement('div');
+  col.className = 'ref-group';
+  const h = document.createElement('h4');
+  h.textContent = g.group;
+  col.appendChild(h);
+  g.items.forEach(it => {
+    const btn = document.createElement('button');
+    btn.className = 'ref-item';
+    const swatch = it.color ? `<span class="ref-swatch" style="background:${it.color}"></span>` : '';
+    btn.innerHTML = `<span class="ref-cls">${it.cls}</span>`
+      + `<span class="ref-val-wrap">${swatch}<span class="ref-val">${it.val}</span></span>`;
+    btn.addEventListener('click', () => {
+      copy(it.cls);
+      btn.classList.add('copied');
+      const clsEl = btn.querySelector('.ref-cls');
+      const prev = clsEl.textContent;
+      clsEl.textContent = 'Copied!';
+      setTimeout(() => { btn.classList.remove('copied'); clsEl.textContent = prev; }, 900);
+    });
+    col.appendChild(btn);
+  });
+  refWrap.appendChild(col);
+});
 </script>
 </body>
 </html>
