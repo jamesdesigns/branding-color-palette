@@ -3,7 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Brand Color Palette</title>
+<title>ASEA Brand Style Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
 <style>
   :root {
     /* ---- PRIMARY ---- */
@@ -45,7 +48,7 @@
 
   header { margin-bottom: 48px; }
   h1 {
-    font-size: 18px; font-weight: 700; letter-spacing: 0.14em;
+    font-size: 13px; font-weight: 700; letter-spacing: 0.14em;
     text-transform: uppercase; margin: 0 0 6px;
   }
   header p { margin: 0; color: var(--muted); font-size: 14px; }
@@ -63,7 +66,7 @@
     font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
     text-transform: uppercase; margin: 0 0 18px; color: var(--ink);
   }
-  .section + .section { margin-top: 24px; }
+  .section + .section { margin-top: 44px; }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
@@ -71,7 +74,7 @@
   }
   .swatch { cursor: pointer; user-select: none; }
   .chip {
-    height: 40px; border-radius: 5px; border: 1px solid rgba(0,0,0,.06);
+    height: 46px; border-radius: 5px; border: 1px solid rgba(0,0,0,.06);
     position: relative; transition: transform .12s;
   }
   .swatch:hover .chip { transform: translateY(-2px); }
@@ -103,6 +106,34 @@
   pre .tok-var { color: #8fd3ff; }
   pre .tok-val { color: #ffd479; }
   pre .tok-cmt { color: #6a7079; }
+
+  /* ---- TYPOGRAPHY ---- */
+  .type-block { margin-top: 80px; }
+  .type-intro { color: var(--muted); font-size: 14px; margin: 0 0 8px; }
+  .type-intro code { font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 12.5px; color: var(--ink); }
+  .type-group + .type-group { margin-top: 40px; }
+  .type-row {
+    display: grid; grid-template-columns: 1fr 220px;
+    gap: 24px; align-items: baseline;
+    padding: 10px 0; border-top: 1px solid var(--line);
+  }
+  .type-row:last-child { border-bottom: 1px solid var(--line); }
+  .type-sample { font-family: "Inter", sans-serif; color: var(--ink); line-height: 1.1; }
+  .type-specs { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; }
+  .spec-pill {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    background: #f6f7f9; border: 1px solid var(--line); border-radius: 6px;
+    padding: 5px 10px; cursor: pointer; text-align: left; width: 100%;
+    font-family: inherit; transition: background .12s, border-color .12s;
+  }
+  .spec-pill:hover { background: #eef0f3; border-color: #d3d7de; }
+  .spec-pill.copied { background: #e7f6ee; border-color: #b6e2c9; }
+  .spec-pill .lbl { font-size: 11px; color: #9aa0a8; }
+  .spec-pill .cls {
+    font-size: 12px; color: var(--ink); font-weight: 600;
+    font-family: "SF Mono", ui-monospace, Menlo, monospace;
+  }
+  .type-note { color: #9aa0a8; font-size: 12px; margin-top: 14px; }
 </style>
 </head>
 <body>
@@ -125,6 +156,14 @@
         <div class="grid" id="grid-secondary"></div>
       </div>
     </div>
+  </div>
+
+  <div class="type-block">
+    <p class="section-label">Type Scale</p>
+    <p class="type-intro">Inter for all type. Headings use <code>font-weight: 200</code> (Extralight); body uses <code>400</code> (Regular). Sizes map to Tailwind's default scale.</p>
+    <div id="type-headings" class="type-group"></div>
+    <div id="type-body" class="type-group"></div>
+    <p class="type-note">Line heights follow Tailwind's default leading for each size step.</p>
   </div>
 
   <div class="code-block">
@@ -267,6 +306,113 @@ document.getElementById('copyAll').addEventListener('click', (e) => {
   e.target.textContent = 'Copied!';
   setTimeout(()=>e.target.textContent = 'Copy all', 1200);
 });
+
+/* ---- TYPOGRAPHY ---- */
+/* Each spec value is an array of {label, cls} pills that copy their Tailwind class on click.
+   `render` holds the actual CSS used to draw the live sample. */
+const HEADINGS = [
+  {
+    name:'H1',
+    render:{ size:'60px', line:'0.92', spacing:'-0.04em', weight:200 },
+    specs:[
+      { label:'Size (mobile)',  cls:'text-4xl' },
+      { label:'Size (desktop)', cls:'text-6xl' },
+      { label:'Line (mobile)',  cls:'leading-[0.95]' },
+      { label:'Line (desktop)', cls:'leading-[0.92]' },
+      { label:'Tracking',       cls:'tracking-[-.04em]' },
+      { label:'Weight',         cls:'font-extralight' },
+    ],
+  },
+  {
+    name:'H2',
+    render:{ size:'60px', line:'2rem', spacing:'-0.04em', weight:200 },
+    specs:[
+      { label:'Size (mobile)',  cls:'text-3xl' },
+      { label:'Size (desktop)', cls:'text-6xl' },
+      { label:'Line',           cls:'leading-8' },
+      { label:'Tracking',       cls:'tracking-[-.04em]' },
+      { label:'Weight',         cls:'font-extralight' },
+    ],
+  },
+  {
+    name:'H3',
+    render:{ size:'20px', line:'1.4', spacing:'normal', weight:600 },
+    specs:[
+      { label:'Size',   cls:'text-xl' },
+      { label:'Weight', cls:'font-semibold' },
+    ],
+  },
+];
+const BODY = [
+  {
+    name:'Body LG',
+    render:{ size:'18px', line:'1.6', color:'#5c6a82', weight:400 },
+    specs:[
+      { label:'Size (mobile)',  cls:'text-base' },
+      { label:'Size (desktop)', cls:'text-lg' },
+      { label:'Color',          cls:'text-[#5c6a82]' },
+    ],
+  },
+  {
+    name:'Body MD',
+    render:{ size:'16px', line:'1.6', color:'#5c6a82', weight:400 },
+    specs:[
+      { label:'Size',  cls:'text-base' },
+      { label:'Color', cls:'text-[#5c6a82]' },
+    ],
+  },
+  {
+    name:'Body SM',
+    render:{ size:'13px', line:'1.6', color:'#5c6a82', weight:400 },
+    specs:[
+      { label:'Size',  cls:'text-[13px]' },
+      { label:'Color', cls:'text-[#5c6a82]' },
+    ],
+  },
+];
+
+function typeRow(t) {
+  const r = t.render;
+  const row = document.createElement('div');
+  row.className = 'type-row';
+
+  const sample = document.createElement('div');
+  sample.className = 'type-sample';
+  sample.textContent = t.name;
+  sample.style.fontSize = r.size;
+  sample.style.lineHeight = r.line;
+  sample.style.fontWeight = r.weight;
+  if (r.spacing) sample.style.letterSpacing = r.spacing;
+  if (r.color) sample.style.color = r.color;
+
+  const specs = document.createElement('div');
+  specs.className = 'type-specs';
+  t.specs.forEach(s => {
+    const pill = document.createElement('button');
+    pill.className = 'spec-pill';
+    pill.innerHTML = `<span class="lbl">${s.label}</span><span class="cls">${s.cls}</span>`;
+    pill.addEventListener('click', () => {
+      copy(s.cls);
+      pill.classList.add('copied');
+      const prev = pill.querySelector('.cls').textContent;
+      pill.querySelector('.cls').textContent = 'Copied!';
+      setTimeout(() => {
+        pill.classList.remove('copied');
+        pill.querySelector('.cls').textContent = prev;
+      }, 900);
+    });
+    specs.appendChild(pill);
+  });
+
+  row.appendChild(sample);
+  row.appendChild(specs);
+  return row;
+}
+
+const hWrap = document.getElementById('type-headings');
+HEADINGS.forEach(t => hWrap.appendChild(typeRow(t)));
+const bWrap = document.getElementById('type-body');
+BODY.forEach(t => bWrap.appendChild(typeRow(t)));
 </script>
 </body>
 </html>
