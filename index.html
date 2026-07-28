@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ASEA Brand Style Guide</title>
+<title>Brand Style Guide</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@200;400;600&display=swap" rel="stylesheet">
@@ -38,50 +38,66 @@
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: #ffffff;
+    background: #f4f5f7;
     color: var(--ink);
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
     -webkit-font-smoothing: antialiased;
-    padding: 56px 40px 80px;
+    padding: 64px 32px 96px;
   }
   .wrap { max-width: 1180px; margin: 0 auto; }
 
-  header { margin-bottom: 48px; }
-  h1 {
-    font-size: 13px; font-weight: 700; letter-spacing: 0.14em;
-    text-transform: uppercase; margin: 0 0 6px;
+  /* ---- PAGE HEADER ---- */
+  .page-head { margin-bottom: 40px; }
+  .page-head .eyebrow {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--primary-blue); margin: 0 0 10px;
   }
-  header p { margin: 0; color: var(--muted); font-size: 14px; }
+  .page-head h1 {
+    font-family: "Inter", sans-serif; font-weight: 200; letter-spacing: -0.03em;
+    font-size: 44px; line-height: 1.05; margin: 0 0 12px; color: var(--primary-navy);
+  }
+  .page-head p { margin: 0; color: var(--muted); font-size: 15px; max-width: 560px; }
 
-  .top { display: grid; grid-template-columns: 420px 1fr; gap: 56px; align-items: start; }
-  @media (max-width: 900px) { .top { grid-template-columns: 1fr; } }
+  /* ---- SECTION CARD (shared shell) ---- */
+  .card {
+    background: #fff; border: 1px solid var(--line); border-radius: 14px;
+    padding: 32px 32px 36px; margin-bottom: 24px;
+    box-shadow: 0 1px 2px rgba(20,25,40,.04);
+  }
+  .card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+  .section-label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
+    text-transform: uppercase; margin: 0; color: var(--ink);
+  }
+  .section-sub { margin: 6px 0 0; color: var(--muted); font-size: 13px; }
+  .section-sub code { font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 12px; color: var(--ink); }
+
+  .top { display: grid; grid-template-columns: 380px 1fr; gap: 48px; align-items: center; }
+  @media (max-width: 900px) { .top { grid-template-columns: 1fr; gap: 32px; } }
 
   /* ---- WHEEL ---- */
-  .wheel-panel svg { width: 100%; height: auto; display: block; }
+  .wheel-panel svg { width: 100%; height: auto; display: block; max-width: 340px; margin: 0 auto; }
   .wheel-seg { cursor: pointer; transition: opacity .15s; }
   .wheel-seg:hover { opacity: .82; }
 
   /* ---- SWATCH GRID ---- */
-  .section-label {
-    font-size: 12px; font-weight: 700; letter-spacing: 0.12em;
-    text-transform: uppercase; margin: 0 0 18px; color: var(--ink);
-  }
-  .section + .section { margin-top: 44px; }
+  .color-groups { display: flex; flex-direction: column; gap: 32px; }
   .grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    gap: 28px 24px;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 24px 20px;
   }
+  .group-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 0 0 16px; }
   .swatch { cursor: pointer; user-select: none; }
   .chip {
-    height: 46px; border-radius: 5px; border: 1px solid rgba(0,0,0,.06);
+    height: 42px; border-radius: 8px; border: 1px solid rgba(0,0,0,.06);
     position: relative; transition: transform .12s;
   }
   .swatch:hover .chip { transform: translateY(-2px); }
   .chip .copied {
     position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: 700; letter-spacing: .04em; color: #fff;
-    background: rgba(0,0,0,.55); border-radius: 5px; opacity: 0;
+    background: rgba(0,0,0,.55); border-radius: 8px; opacity: 0;
     transition: opacity .15s; text-transform: uppercase;
   }
   .chip.show .copied { opacity: 1; }
@@ -90,16 +106,14 @@
   .meta .hex { color: var(--ink); font-weight: 600; }
 
   /* ---- CSS VARS BLOCK ---- */
-  .code-block { margin-top: 64px; }
-  .code-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-  .code-head .section-label { margin: 0; }
+  .code-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
   .copy-all {
     font-size: 12px; font-weight: 600; border: 1px solid var(--line);
     background: #fff; color: var(--ink); padding: 7px 14px; border-radius: 6px; cursor: pointer;
   }
   .copy-all:hover { background: #f6f7f9; }
   pre {
-    margin: 0; background: #0f1115; color: #e6e6e6; border-radius: 8px;
+    margin: 0; background: #0f1115; color: #e6e6e6; border-radius: 10px;
     padding: 22px 24px; overflow-x: auto; font-size: 12.5px; line-height: 1.7;
     font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
   }
@@ -107,19 +121,25 @@
   pre .tok-val { color: #ffd479; }
   pre .tok-cmt { color: #6a7079; }
 
-  /* ---- TYPOGRAPHY ---- */
-  .type-block { margin-top: 80px; }
-  .type-intro { color: var(--muted); font-size: 14px; margin: 0 0 8px; }
-  .type-intro code { font-family: "SF Mono", ui-monospace, Menlo, monospace; font-size: 12.5px; color: var(--ink); }
-  .type-group + .type-group { margin-top: 40px; }
-  .type-row {
-    display: grid; grid-template-columns: 1fr 220px;
-    gap: 24px; align-items: baseline;
-    padding: 10px 0; border-top: 1px solid var(--line);
+  /* ---- TYPOGRAPHY (card grid, mirrors swatches) ---- */
+  .type-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 24px 20px;
   }
-  .type-row:last-child { border-bottom: 1px solid var(--line); }
-  .type-sample { font-family: "Inter", sans-serif; color: var(--ink); line-height: 1.1; }
-  .type-specs { display: flex; flex-direction: column; gap: 4px; padding-top: 6px; }
+  .type-card {
+    border: 1px solid var(--line); border-radius: 10px; overflow: hidden;
+    display: flex; flex-direction: column;
+  }
+  .type-preview {
+    background: #fafbfc; border-bottom: 1px solid var(--line);
+    padding: 24px 20px; min-height: 108px;
+    display: flex; align-items: center;
+  }
+  .type-sample { font-family: "Inter", sans-serif; color: var(--ink); line-height: 1.05; }
+  .type-body-inner { padding: 16px 16px 18px; }
+  .type-name { font-size: 13px; font-weight: 700; margin: 0 0 12px; color: var(--ink); }
+  .type-specs { display: flex; flex-direction: column; gap: 5px; }
   .spec-pill {
     display: flex; align-items: center; justify-content: space-between; gap: 12px;
     background: #f6f7f9; border: 1px solid var(--line); border-radius: 6px;
@@ -138,35 +158,46 @@
 </head>
 <body>
 <div class="wrap">
-  <header>
-    <h1>ASEA Brand Color Palette</h1>
-    <p>Click any swatch or wheel segment to copy its hex. Grab the full token block at the bottom.</p>
-  </header>
+  <div class="page-head">
+    <p class="eyebrow">Brand Style Guide</p>
+    <h1>Color &amp; Typography</h1>
+    <p>Click any swatch, wheel segment, or spec to copy its value. The full CSS token block is at the bottom.</p>
+  </div>
 
-  <div class="top">
-    <div class="wheel-panel" id="wheel"></div>
-
-    <div>
-      <div class="section">
-        <p class="section-label">Primary Colors</p>
-        <div class="grid" id="grid-primary"></div>
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <p class="section-label">Color Palette</p>
+        <p class="section-sub">Primary and secondary brand colors with HEX, RGB, and CMYK values.</p>
       </div>
-      <div class="section">
-        <p class="section-label">Secondary Colors</p>
-        <div class="grid" id="grid-secondary"></div>
+    </div>
+    <div class="top">
+      <div class="wheel-panel" id="wheel"></div>
+      <div class="color-groups">
+        <div>
+          <p class="group-label">Primary</p>
+          <div class="grid" id="grid-primary"></div>
+        </div>
+        <div>
+          <p class="group-label">Secondary</p>
+          <div class="grid" id="grid-secondary"></div>
+        </div>
       </div>
     </div>
   </div>
 
-  <div class="type-block">
-    <p class="section-label">Type Scale</p>
-    <p class="type-intro">Inter for all type. Headings use <code>font-weight: 200</code> (Extralight); body uses <code>400</code> (Regular). Sizes map to Tailwind's default scale.</p>
-    <div id="type-headings" class="type-group"></div>
-    <div id="type-body" class="type-group"></div>
-    <p class="type-note">Line heights follow Tailwind's default leading for each size step.</p>
+  <div class="card">
+    <div class="card-head">
+      <div>
+        <p class="section-label">Type Scale</p>
+        <p class="section-sub">Inter throughout. Headings use <code>font-extralight</code>; body uses <code>font-normal</code>. Click any spec to copy its Tailwind class.</p>
+      </div>
+    </div>
+    <div class="type-grid" id="type-headings"></div>
+    <div class="type-grid" id="type-body" style="margin-top:20px"></div>
   </div>
 
-  <div class="code-block">
+  <div class="card">
     <div class="code-head">
       <p class="section-label">CSS Variables</p>
       <button class="copy-all" id="copyAll">Copy all</button>
@@ -373,17 +404,27 @@ const BODY = [
 
 function typeRow(t) {
   const r = t.render;
-  const row = document.createElement('div');
-  row.className = 'type-row';
+  const card = document.createElement('div');
+  card.className = 'type-card';
 
+  const preview = document.createElement('div');
+  preview.className = 'type-preview';
   const sample = document.createElement('div');
   sample.className = 'type-sample';
-  sample.textContent = t.name;
+  sample.textContent = 'Ag';
   sample.style.fontSize = r.size;
   sample.style.lineHeight = r.line;
   sample.style.fontWeight = r.weight;
   if (r.spacing) sample.style.letterSpacing = r.spacing;
   if (r.color) sample.style.color = r.color;
+  preview.appendChild(sample);
+
+  const inner = document.createElement('div');
+  inner.className = 'type-body-inner';
+  const nm = document.createElement('p');
+  nm.className = 'type-name';
+  nm.textContent = t.name;
+  inner.appendChild(nm);
 
   const specs = document.createElement('div');
   specs.className = 'type-specs';
@@ -394,19 +435,18 @@ function typeRow(t) {
     pill.addEventListener('click', () => {
       copy(s.cls);
       pill.classList.add('copied');
-      const prev = pill.querySelector('.cls').textContent;
-      pill.querySelector('.cls').textContent = 'Copied!';
-      setTimeout(() => {
-        pill.classList.remove('copied');
-        pill.querySelector('.cls').textContent = prev;
-      }, 900);
+      const clsEl = pill.querySelector('.cls');
+      const prev = clsEl.textContent;
+      clsEl.textContent = 'Copied!';
+      setTimeout(() => { pill.classList.remove('copied'); clsEl.textContent = prev; }, 900);
     });
     specs.appendChild(pill);
   });
+  inner.appendChild(specs);
 
-  row.appendChild(sample);
-  row.appendChild(specs);
-  return row;
+  card.appendChild(preview);
+  card.appendChild(inner);
+  return card;
 }
 
 const hWrap = document.getElementById('type-headings');
